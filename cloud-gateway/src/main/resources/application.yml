@@ -1,0 +1,22 @@
+server:
+  port: 9191
+spring:
+  application:
+    name: API-GATEWAY
+  main:
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        - id: reservation-service
+          uri: lb://reservation-service
+          predicates:
+            - Path=/reservation/**
+        - id: DEPT-SERVICE
+          uri: lb://DEPT-SERVICE
+          predicates:
+            - Path=/dept/**
+                 
+  
+      
+         
