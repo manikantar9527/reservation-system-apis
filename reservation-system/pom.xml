@@ -9,10 +9,10 @@
 		<version>2.6.2</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.xadmin</groupId>
-	<artifactId>spring-security-DataBase</artifactId>
+	<groupId>com.persistent</groupId>
+	<artifactId>rervation-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-security-DataBase</name>
+	<name>rervation-service</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
