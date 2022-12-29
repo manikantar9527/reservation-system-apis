@@ -4,16 +4,21 @@ public class AppConstants {
 	public static final String LOWER = "lower";
 	public static final String UPPER = "upper";
 	public static final String FEMALE = "female";
+	public static final String USER_DETAILS_ADDED = "User details added successfully";
+	public static final String TRAIN_DETAILS_ADDED = "Train details added successfully";
 	public static final String USER_ALREADY_REGISTERED = "user already registered";
 	public static final String INVALID_DETAILS = "Invalid Details";
-	public static final String INVALID_MOBILENUMBER = "invalid mobileNumber";
+	public static final String TRAIN_NOT_AVAILABLE = "Train is not available between the Station on this date";
+	public static final String INVALID_MOBILENUMBER = "Invalid mobileNumber";
+	public static final String INVALID_USER_ID = "Invalid UserId";
 	public static final String SEATS_AVAILABLE = "seates available";
 	public static final String SEATS_NOT_AVAILABLE = "seates not available";
-	public static final String SEATS_NOT_AVAILABLE_IN_LOWER ="lower seates not available";
-	public static final String INVALID_TICKET_DETAILS ="Invalid ticket details";
-	public static final String TICKET_CANCELLED_SUCCESSFULLY ="Ticket cancelled successfully";
-	public static final String AVAILABILITY_DETAILS_ADDED="Availability details added";
-	public static final String AVAILABILITY_DETAILS_ALREADY_EXIST="Availability details already exist";
-	
-	
+	public static final String SEATS_NOT_AVAILABLE_IN_LOWER = "lower seates not available";
+	public static final String INVALID_TICKET_DETAILS = "Invalid ticket details";
+	public static final String TICKET_CANCELLATION_NOT_ALLOWED = "Ticket Cancellation not allowed";
+	public static final String TICKET_CANCELLED_SUCCESSFULLY = "Ticket cancelled successfully";
+	public static final String AVAILABILITY_DETAILS_ADDED = "Availability details added";
+	public static final String AVAILABILITY_DETAILS_ALREADY_EXIST = "Availability details already exist";
+	public static final String USER_DETAILS_UPDATED = "User details updated successfully";
+
 }

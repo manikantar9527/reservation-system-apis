@@ -1,5 +1,7 @@
 package com.persistent.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,10 +11,10 @@ import com.persistent.dao.Passenger;
 public interface PassengerRepository extends JpaRepository<Passenger, Long>{
 
 
-	Passenger findByUserId(Long userId);
+	Optional<Passenger> findByUserId(Long userId);
 
-	Passenger findByContactNumber(String contactNumber);
+	Optional<Passenger> findByContactNumber(String contactNumber);
 
-	Object findByUserIdOrContactNumber(Long userId,String contactNumber);
+	Optional<Passenger> findByUserIdOrContactNumber(Long userId,String contactNumber);
 
 }

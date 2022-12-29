@@ -15,10 +15,13 @@ import com.persistent.dao.TrainInfo;
 import com.persistent.dto.CancelTicketDto;
 import com.persistent.dto.SearchTrainDto;
 import com.persistent.dto.StatusDto;
+import com.persistent.dto.TrainAvailabilityDto;
 import com.persistent.service.TrainInfoService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
-//@Slf4j
+@Slf4j
 @RequestMapping("rest")
 public class TrainInfoController {
 
@@ -26,20 +29,20 @@ public class TrainInfoController {
 	private TrainInfoService service;
 
 	@PostMapping("searchTrain")
-	public ResponseEntity<List<TrainInfo>> searchTrain(@Valid @RequestBody SearchTrainDto reqDto) {
-		// log.info("searchTrain() excecution - started");
+	public ResponseEntity<List<TrainAvailabilityDto>> searchTrain(@Valid @RequestBody SearchTrainDto reqDto) {
+		log.info("searchTrain() excecution - started");
 		return ResponseEntity.ok(service.searchTrain(reqDto));
 	}
 
 	@PostMapping("cancel/ticket")
 	public ResponseEntity<StatusDto> cancelTicket(@Valid @RequestBody CancelTicketDto reqDto) {
-		// log.info("cancelTicket() excecution - started");
+		log.info("cancelTicket() excecution - started");
 		return ResponseEntity.ok(service.cancelTicket(reqDto));
 	}
 
 	@PostMapping("add/train")
-	public ResponseEntity<TrainInfo> addTrainDetails(@Valid @RequestBody TrainInfo train) {
-		// log.info("addTrainDetails() excecution - started");
+	public ResponseEntity<StatusDto> addTrainDetails(@Valid @RequestBody TrainInfo train) {
+		log.info("addTrainDetails() excecution - started");
 		return ResponseEntity.ok(service.addTrainDetails(train));
 	}
 }

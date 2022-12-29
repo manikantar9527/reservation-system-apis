@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.persistent.dto.PassengerDto;
+import com.persistent.dto.StatusDto;
 import com.persistent.service.RegistrationService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +26,9 @@ public class ProfileController {
 	private RegistrationService service;
 
 	@PostMapping("update/profile")
-	public ResponseEntity<PassengerDto> updatePassengerDetails(@Valid @RequestBody PassengerDto passenger) {
+	public ResponseEntity<StatusDto> updatePassengerDetails(@Valid @RequestBody PassengerDto passenger) {
 		log.info("updatePassengerDetails() excecution - started");
-		return ResponseEntity.ok(service.addPassengerDetails(passenger));
+		return ResponseEntity.ok(service.updatePassengerDetails(passenger));
 	}
 
 	@GetMapping("passeger/{mobileNumber}")

@@ -1,7 +1,6 @@
 package com.persistent.dao;
 
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +13,7 @@ import javax.persistence.SequenceGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Availability {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "availability_seq")
@@ -41,6 +42,9 @@ public class Availability {
 	private Integer noOfUpperSeatsAvailable;
 	private Integer noOfLowerSeatsAvailable;
 	private String coach;
+	private String classType;
+	private Integer LowerWaitingList;
+	private Integer upperWaitingList;
 	
 	
 }

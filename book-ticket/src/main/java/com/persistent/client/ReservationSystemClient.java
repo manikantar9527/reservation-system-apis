@@ -14,7 +14,7 @@ import com.persistent.dto.AvailabilityDto;
 public interface ReservationSystemClient {
 
 
-	@PostMapping("reservation/rest/ticket/availability")
+	@PostMapping("reservation/ticket/availability")
 	public ResponseEntity<List<Availability>> ticketAvailability(@RequestBody AvailabilityDto reqDto);
 
 }

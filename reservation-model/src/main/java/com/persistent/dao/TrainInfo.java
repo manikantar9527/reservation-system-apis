@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.springframework.data.annotation.CreatedDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "train_info")
 public class TrainInfo {
 	@Id
@@ -35,8 +37,15 @@ public class TrainInfo {
 	private String departureLocation;
 	private String availableDays;
 	private String departuretime;
-	private Integer totalSeats;
-	private Integer noOfCoaches;
+	private Integer total3ASeats;
+	private Integer noOf3ACoaches;
+	private Integer total2ASeats;
+	private Integer noOf2ACoaches;
+	private Integer totalSLSeats;
+	private Integer noOfSLCoaches;
+	private Integer total2SSeats;
+	private Integer noOf2SCoaches;
+	
 
 	
 	private String arrivalTime;

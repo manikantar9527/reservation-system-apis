@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import org.springframework.data.annotation.CreatedDate;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Ticket {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ticket_seq")
@@ -37,11 +39,12 @@ public class Ticket {
 	private Double ticketCost;
 	private String startingLocation;
 	private String destination;
-	private int status;
+	private Integer status;
 	private Date date;
 	private String berthType;
 	private String seatNumber;
 	private String coach;
+	private String classType;
 
 	@CreatedDate
 	private Date createdOn;

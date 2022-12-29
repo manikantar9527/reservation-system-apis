@@ -17,5 +17,6 @@ public class AvailabilityDto {
 	private Date Date;
 	@NotNull(message = "TrainId can not be null")
 	private Long trainId;
-	private String mobileNumber;
+	@NotNull(message = "ClassType can not be null")
+	private String classType;
 }
