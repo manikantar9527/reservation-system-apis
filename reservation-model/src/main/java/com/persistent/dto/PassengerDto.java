@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern.Flag;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class PassengerDto {
 	private String emailId;
 	@NotBlank(message = "Gender can not be null")
 	private String gender;
-	@NotBlank(message = "Age can not be null")
+	@NotNull(message = "Age can not be null")
 	private Integer age;
 	private String address;
 	// @JsonIgnore

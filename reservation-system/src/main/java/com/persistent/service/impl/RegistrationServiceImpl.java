@@ -63,10 +63,14 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 	@Override
 	public PassengerDto getPassengerDetails(String ContactNumber) {
-		Passenger passenger = passengerRepository.findByContactNumber(ContactNumber)
-				.orElseThrow(() -> new ReservationException(AppConstants.INVALID_MOBILENUMBER,
-						HttpStatus.PRECONDITION_FAILED, Severity.INFO));
-		return modelMapper.map(passenger, PassengerDto.class);
+		try {
+			Passenger passenger = passengerRepository.findByContactNumber(ContactNumber)
+					.orElseThrow(() -> new ReservationException(AppConstants.INVALID_MOBILENUMBER,
+							HttpStatus.PRECONDITION_FAILED, Severity.INFO));
+			return modelMapper.map(passenger, PassengerDto.class);
+		} catch (Exception e) {
+			throw new ReservationException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, Severity.ERROR);
+		}
 	}
 
 }

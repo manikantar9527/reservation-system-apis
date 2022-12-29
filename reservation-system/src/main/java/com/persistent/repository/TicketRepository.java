@@ -26,4 +26,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 	Ticket findFirstByTrainTrainIdAndDateAndClassTypeAndStatusAndBerthTypeOrderByTicketId(Long trainId, Date date,
 			String classType, int i, String berthType);
 
+	Optional<Ticket> findByPnr(String pnr);
+
+	Optional<Ticket> findByPassengerContactNumber(String mobileNumber);
+
 }

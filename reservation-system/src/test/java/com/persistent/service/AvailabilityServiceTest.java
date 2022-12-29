@@ -7,8 +7,6 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,18 +43,19 @@ public class AvailabilityServiceTest {
 		when(availabilityRepository.findByTrainTrainIdAndDate(any(), any())).thenReturn(new ArrayList<>());
 		assertNotNull(service.addAvailability(new AvailabilityDto(new Date(), 1L, "3A")));
 	}
-	
 
 	@Test
 	public void addAvailabilityWithException() {
-		when(availabilityRepository.findByTrainTrainIdAndDate(any(), any())).thenReturn(Util.getAvailabilities(new TrainInfo(),new Date()));
+		when(availabilityRepository.findByTrainTrainIdAndDate(any(), any()))
+				.thenReturn(Util.getAvailabilities(new TrainInfo(), new Date()));
 		assertNotNull(service.addAvailability(new AvailabilityDto(new Date(), 1L, "3A")));
 	}
-	
+
 	@Test
 	public void addAvailabilityWithNullException() {
 		when(availabilityRepository.findByTrainTrainIdAndDate(any(), any())).thenReturn(null);
-		//assertNotNull(service.addAvailability(new AvailabilityDto(new Date(), 1L, "3A")));
+		// assertNotNull(service.addAvailability(new AvailabilityDto(new Date(), 1L,
+		// "3A")));
 		try {
 			service.addAvailability(new AvailabilityDto(new Date(), 1L, "3A"));
 
@@ -64,22 +63,24 @@ public class AvailabilityServiceTest {
 			assertNotNull("");
 		}
 	}
-	
+
 	@Test
 	public void ticketAvailability() {
-		when(availabilityRepository.findByTrainTrainIdAndDateAndClassType(any(), any(),any())).thenReturn(Arrays.asList(new Availability()));
+		when(availabilityRepository.findByTrainTrainIdAndDateAndClassType(any(), any(), any()))
+				.thenReturn(Arrays.asList(new Availability()));
 		assertNotNull(service.ticketAvailability(new AvailabilityDto(new Date(), 1L, "3A")));
 	}
+
 	@Test
 	public void ticketAvailabilityWithException() {
-		when(availabilityRepository.findByTrainTrainIdAndDateAndClassType(any(), any(),any())).thenReturn(new ArrayList<>());
+		when(availabilityRepository.findByTrainTrainIdAndDateAndClassType(any(), any(), any()))
+				.thenReturn(new ArrayList<>());
 		try {
 			service.ticketAvailability(new AvailabilityDto(new Date(), 1L, "3A"));
 		} catch (Exception e) {
 			assertNotNull("");
 		}
-		
-				
+
 	}
-	
+
 }

@@ -45,6 +45,7 @@ public class Ticket {
 	private String seatNumber;
 	private String coach;
 	private String classType;
+	private String pnr;
 
 	@CreatedDate
 	private Date createdOn;

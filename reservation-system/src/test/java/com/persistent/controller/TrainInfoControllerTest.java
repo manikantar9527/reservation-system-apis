@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.persistent.dao.TrainInfo;
-import com.persistent.dto.CancelTicketDto;
 import com.persistent.dto.SearchTrainDto;
 import com.persistent.dto.StatusDto;
 import com.persistent.dto.TrainAvailabilityDto;
@@ -33,13 +32,6 @@ public class TrainInfoControllerTest {
 	public void addTrainDetailsTest() throws Exception {
 		when(service.addTrainDetails(Mockito.any())).thenReturn(new StatusDto());
 		ResponseEntity<StatusDto> responseEntity = controller.addTrainDetails(new TrainInfo());
-		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-	}
-
-	@Test
-	public void cancelTicketTest() throws Exception {
-		when(service.cancelTicket(Mockito.any())).thenReturn(new StatusDto());
-		ResponseEntity<StatusDto> responseEntity = controller.cancelTicket(new CancelTicketDto());
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 	}
 

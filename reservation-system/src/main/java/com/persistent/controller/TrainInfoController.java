@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.persistent.dao.TrainInfo;
-import com.persistent.dto.CancelTicketDto;
 import com.persistent.dto.SearchTrainDto;
 import com.persistent.dto.StatusDto;
 import com.persistent.dto.TrainAvailabilityDto;
@@ -34,15 +33,10 @@ public class TrainInfoController {
 		return ResponseEntity.ok(service.searchTrain(reqDto));
 	}
 
-	@PostMapping("cancel/ticket")
-	public ResponseEntity<StatusDto> cancelTicket(@Valid @RequestBody CancelTicketDto reqDto) {
-		log.info("cancelTicket() excecution - started");
-		return ResponseEntity.ok(service.cancelTicket(reqDto));
-	}
-
 	@PostMapping("add/train")
 	public ResponseEntity<StatusDto> addTrainDetails(@Valid @RequestBody TrainInfo train) {
 		log.info("addTrainDetails() excecution - started");
 		return ResponseEntity.ok(service.addTrainDetails(train));
 	}
+
 }

@@ -2,6 +2,7 @@ package com.persistent.serviceimpl;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,10 +70,10 @@ public class BookServiceImpl implements BookService {
 			TrainInfo trainInfo = trainInfoRepository.findByTrainId(reqDto.getTrainId())
 					.orElseThrow(() -> new ReservationException(AppConstants.INVALID_TRAIN_ID,
 							HttpStatus.PRECONDITION_FAILED, Severity.INFO));
-			;
 			Ticket ticket = new Ticket();
 			ticket.setClassType(reqDto.getClassType());
 			ticket.setStatus(TicketStatus.CONFORMED.getValue());
+			ticket.setPnr(String.format("%06d", new Random().nextInt(999999)));
 			int totalSeatsAvailable = availabilities.stream()
 					.collect(Collectors.summingInt(Availability::getNoOfLowerSeatsAvailable))
 					+ availabilities.stream().collect(Collectors.summingInt(Availability::getNoOfUpperSeatsAvailable));

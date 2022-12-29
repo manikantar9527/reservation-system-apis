@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class SearchTrainDto {
 	private String source;
 	@NotBlank(message = "Destination can not be null")
 	private String destination;
-	@NotBlank(message = "Date can not be null")
+	@NotNull(message = "Date can not be null")
 	@Future(message = "The date must be in the future.")
 	private Date date;
 }
