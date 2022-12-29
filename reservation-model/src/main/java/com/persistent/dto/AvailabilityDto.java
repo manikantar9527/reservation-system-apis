@@ -3,7 +3,8 @@ package com.persistent.dto;
 import java.util.Date;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,11 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AvailabilityDto {
-	@NotNull(message = "Date can not be null")
+	@NotBlank(message = "Date can not be null")
 	@Future(message = "The date must be in the future.")
 	private Date Date;
-	@NotNull(message = "TrainId can not be null")
+	@NotBlank(message = "TrainId can not be null")
 	private Long trainId;
-	@NotNull(message = "ClassType can not be null")
+	@NotBlank(message = "ClassType can not be null")
 	private String classType;
 }

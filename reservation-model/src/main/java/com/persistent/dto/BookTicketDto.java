@@ -3,7 +3,7 @@ package com.persistent.dto;
 import java.util.Date;
 
 import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import com.persistent.dao.Passenger;
 import com.persistent.dao.TrainInfo;
@@ -16,20 +16,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookTicketDto {
-	@NotNull(message = "UserId can not be null")
+	@NotBlank(message = "UserId can not be null")
 	private Long userId;
 	private TrainInfo train;
 	private Passenger passenger;
-	@NotNull(message = "TrainId can not be null")
+	@NotBlank(message = "TrainId can not be null")
 	private Long trainId;
 	
-	@NotNull(message = "ClassType can not be null")
+	@NotBlank(message = "ClassType can not be null")
 	private String ClassType;
 
 	private Double ticketCost;
 	private String startingLocation;
 	private String destination;
-	@NotNull(message = "Date can not be null")
+	@NotBlank(message = "Date can not be null")
 	@Future(message = "The date must be in the future.")
 	private Date date;
 	private String berthType;

@@ -1,6 +1,6 @@
 package com.persistent.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CancelTicketDto {
-	@NotNull(message = "ContactNumber can not be null")
+	@NotBlank(message = "ContactNumber can not be null")
 	private String contactNumber;
-	@NotNull(message = "TicketId can not be null")
+	@NotBlank(message = "TicketId can not be null")
 	private Long ticketId;
 }
