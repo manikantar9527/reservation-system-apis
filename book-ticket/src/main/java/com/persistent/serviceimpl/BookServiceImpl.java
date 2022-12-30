@@ -7,15 +7,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.persistent.client.ReservationSystemClient;
 import com.persistent.dao.Availability;
 import com.persistent.dao.Passenger;
 import com.persistent.dao.Ticket;
 import com.persistent.dao.TrainInfo;
-import com.persistent.dto.AvailabilityDto;
 import com.persistent.dto.BookTicketDto;
 import com.persistent.dto.TicketStatus;
 import com.persistent.exception.ReservationException;
@@ -34,8 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 public class BookServiceImpl implements BookService {
 
 	@Autowired
-	private ReservationSystemClient service;
-	@Autowired
 	private AvailabilityRepository availabilityRepository;
 
 	@Autowired
@@ -47,16 +42,6 @@ public class BookServiceImpl implements BookService {
 	@Autowired
 	private TrainInfoRepository trainInfoRepository;
 
-	private List<Availability> callReservationService(BookTicketDto reqDto) {
-		AvailabilityDto availabilityDto = new AvailabilityDto();
-		availabilityDto.setDate(reqDto.getDate());
-		availabilityDto.setClassType(reqDto.getClassType());
-
-		availabilityDto.setTrainId(reqDto.getTrainId());
-		ResponseEntity<List<Availability>> res = service.ticketAvailability(availabilityDto);// get only 3A
-		return res.getBody();
-	}
-
 	@Override
 	public Ticket bookTicket(BookTicketDto reqDto) {
 		try {
@@ -64,8 +49,8 @@ public class BookServiceImpl implements BookService {
 			Passenger passenger = passengerRepository.findByUserId(reqDto.getUserId())
 					.orElseThrow(() -> new ReservationException(AppConstants.INVALID_USER_ID,
 							HttpStatus.PRECONDITION_FAILED, Severity.INFO));
-			List<Availability> availabilities = availabilityRepository.findByTrainTrainIdAndDateAndClassType(reqDto.getTrainId(),
-					reqDto.getDate(),reqDto.getClassType());
+			List<Availability> availabilities = availabilityRepository.findByTrainTrainIdAndDateAndClassType(
+					reqDto.getTrainId(), reqDto.getDate(), reqDto.getClassType());
 			String seatNumber = null;
 			String coach = null;
 			TrainInfo trainInfo = trainInfoRepository.findByTrainId(reqDto.getTrainId())
@@ -89,9 +74,25 @@ public class BookServiceImpl implements BookService {
 						|| passenger.getAge() < 15 || passenger.getAge() > 60) {
 					if (availabilities.stream()
 							.collect(Collectors.summingInt(Availability::getNoOfLowerSeatsAvailable)) == 0
-							&& avail.getLowerWaitingList() == 50)
-						throw new ReservationException(AppConstants.SEATS_NOT_AVAILABLE_IN_LOWER, HttpStatus.ACCEPTED,
-								Severity.INFO);
+							&& avail.getLowerWaitingList() == 50) {
+
+						Availability availability = availabilities.stream().collect(
+								Collectors.maxBy(Comparator.comparing(Availability::getNoOfUpperSeatsAvailable))).get();
+						if (totalSeatsAvailable != 0) {
+							availability.setNoOfUpperSeatsAvailable(availability.getNoOfUpperSeatsAvailable() - 1);
+							seatNumber = reqDto.getClassType() + "-" + availability.getCoach() + "-"
+									+ (availability.getNoOfUpperSeatsAvailable() + 1);
+							coach = availability.getCoach();
+						} else {
+							avail.setUpperWaitingList(avail.getUpperWaitingList() + 1);
+							ticket.setStatus(TicketStatus.WAITINGLIST.getValue());
+							availabilityRepository.save(avail);
+						}
+
+						availabilityRepository.save(availability);
+						ticket.setBerthType(AppConstants.UPPER);
+					
+					}
 					else {
 						Availability availability = availabilities.stream().collect(
 								Collectors.maxBy(Comparator.comparing(Availability::getNoOfLowerSeatsAvailable))).get();
