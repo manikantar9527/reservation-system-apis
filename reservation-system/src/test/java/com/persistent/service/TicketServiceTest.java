@@ -15,11 +15,13 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 
 import com.persistent.client.BookServiceClient;
 import com.persistent.dao.Passenger;
@@ -47,6 +49,9 @@ public class TicketServiceTest {
 
 	@MockBean
 	private TrainInfoRepository trainInfoRepository;
+
+	@Mock
+	private HttpClientErrorException httpClientErrorException;
 
 	@MockBean
 	private TicketRepository ticketRepository;
@@ -227,7 +232,7 @@ public class TicketServiceTest {
 		when(ticketRepository.findFirstByTrainTrainIdAndDateAndClassTypeAndStatusOrderByTicketId(1L, getTime(), "3A",
 				2)).thenReturn(ticket);
 		try {
-			service.cancelTicket(new CancelTicketDto("9590989397", 1L, true));
+			service.cancelTicket(new CancelTicketDto("9590989397", 1L, false));
 		} catch (Exception e) {
 			assertNotNull("");
 		}
@@ -244,6 +249,17 @@ public class TicketServiceTest {
 				.build();
 		when(bookServiceClient.bookTicket(any())).thenReturn(new ResponseEntity<Ticket>(ticket, HttpStatus.OK));
 		assertNotNull(service.bookTicket(new BookTicketDto()));
+	}
+
+	@Test
+	public void bookTicketException() {
+		try {
+			when(bookServiceClient.bookTicket(any())).thenThrow(httpClientErrorException);
+			service.bookTicket(new BookTicketDto());
+		} catch (Exception e) {
+			assertNotNull("");
+		}
+		
 	}
 
 }
