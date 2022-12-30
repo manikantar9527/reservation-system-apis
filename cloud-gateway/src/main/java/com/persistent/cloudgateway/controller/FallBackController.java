@@ -9,15 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class FallBackController {
 
-	@GetMapping("/userServiceFallBack")
+	@GetMapping("/reservationServiceFallBack")
 	public ResponseEntity<String> userServiceFallBackMethod() {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body("User service taking longer than expected. Please try again later.");
+				.body("Reservation service taking longer than expected. Please try again later.");
 	}
 
-	@GetMapping("/departmentServiceFallBack")
+	@GetMapping("/bookTicketServiceFallBack")
 	public ResponseEntity<String> depterviceFallBackMethod() {
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body("dept service taking longer than expected. Please try again later.");
+				.body("BookTicket service taking longer than expected. Please try again later.");
 	}
 }
