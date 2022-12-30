@@ -80,7 +80,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
 		List<Availability> list = availabilityRepository.findByTrainTrainIdAndDateAndClassType(reqDto.getTrainId(),
 				reqDto.getDate(),reqDto.getClassType());
 		if (list.isEmpty())
-			throw new ReservationException(AppConstants.INVALID_DETAILS, HttpStatus.BAD_REQUEST, Severity.INFO);
+			throw new ReservationException(AppConstants.INVALID_DETAILS, HttpStatus.PRECONDITION_FAILED, Severity.INFO);
 		else
 			return list;
 	}

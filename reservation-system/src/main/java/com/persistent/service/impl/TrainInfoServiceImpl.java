@@ -49,7 +49,7 @@ public class TrainInfoServiceImpl implements TrainInfoService {
 			List<String> classTypes = Arrays.asList("3A", "2A", "SL", "2S");
 			classTypes.forEach(c -> {
 				List<Availability> availableSeats = availabilityRepository
-						.findByTrainTrainIdAndClassType(t.getTrainId(), c);
+						.findByTrainTrainIdAndClassTypeOrderByCoach(t.getTrainId(), c);
 				SeatInfoDto seatInfoDto = new SeatInfoDto();
 				seatInfoDto.setClassType(c);
 				seatInfoDto.setNoOfSeats(

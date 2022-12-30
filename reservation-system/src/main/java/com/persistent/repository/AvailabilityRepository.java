@@ -17,7 +17,7 @@ public interface AvailabilityRepository extends JpaRepository<Availability, Long
 
 	Availability findByTrainTrainIdAndDateAndCoach(Long trainId, Date date, String coach);
 
-	List<Availability> findByTrainTrainIdAndClassType(Long trainId, String c);
+	List<Availability> findByTrainTrainIdAndClassTypeOrderByCoach(Long trainId, String c);
 
 	List<Availability> findByTrainTrainIdAndDateAndClassType(Long trainId, Date date, String classType);
 

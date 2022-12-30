@@ -7,7 +7,7 @@ public class AppConstants {
 	public static final String USER_DETAILS_ADDED = "User details added successfully";
 	public static final String TRAIN_DETAILS_ADDED = "Train details added successfully";
 	public static final String USER_ALREADY_REGISTERED = "user already registered";
-	public static final String INVALID_DETAILS = "Invalid Details";
+	public static final String INVALID_DETAILS = "Data not available";
 	public static final String TRAIN_NOT_AVAILABLE = "Train is not available between the Station on this date";
 	public static final String INVALID_MOBILENUMBER = "Invalid mobileNumber";
 	public static final String INVALID_USER_ID = "Invalid UserId";

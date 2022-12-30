@@ -31,7 +31,7 @@ public class ProfileController {
 		return ResponseEntity.ok(service.updatePassengerDetails(passenger));
 	}
 
-	@GetMapping("passeger/{mobileNumber}")
+	@GetMapping("passenger/{mobileNumber}")
 	public ResponseEntity<PassengerDto> getPassengerDetails(@PathVariable String mobileNumber) {
 		log.info("getPassengerDetails() excecution - started");
 		return ResponseEntity.ok(service.getPassengerDetails(mobileNumber));

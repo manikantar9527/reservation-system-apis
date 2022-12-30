@@ -51,13 +51,11 @@ public class TicketServiceImpl implements TicketService {
 			Calendar cal2 = Calendar.getInstance();
 			cal1.setTime(new Date());
 			cal2.setTime(ticket.getDate());
-
-			/*
-			 * if (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR) &&
-			 * cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)) throw new
-			 * ReservationException(AppConstants.TICKET_CANCELLATION_NOT_ALLOWED,
-			 * HttpStatus.PRECONDITION_FAILED, Severity.INFO);
-			 */
+			if (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
+					&& cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
+				throw new ReservationException(AppConstants.TICKET_CANCELLATION_NOT_ALLOWED,
+						HttpStatus.PRECONDITION_FAILED, Severity.INFO);
+			 
 
 			ticket.setStatus(TicketStatus.CANCELLED.getValue());
 			ticketRepository.save(ticket);
@@ -71,16 +69,16 @@ public class TicketServiceImpl implements TicketService {
 			if (totalSeatsAvailable == 0 && (avail.getLowerWaitingList() + avail.getUpperWaitingList()) != 0) {
 				Ticket ticketToConfirm = ticketRepository
 						.findFirstByTrainTrainIdAndDateAndClassTypeAndStatusAndBerthTypeOrderByTicketId(
-								ticket.getTrain().getTrainId(), ticket.getDate(), ticket.getClassType(), 2,
+								ticket.getTrain().getTrainId(), ticket.getDate(), ticket.getClassType(), TicketStatus.WAITINGLIST.getValue(),
 								ticket.getBerthType());
 				if (ticketToConfirm == null)
 					ticketToConfirm = ticketRepository
 							.findFirstByTrainTrainIdAndDateAndClassTypeAndStatusOrderByTicketId(
-									ticket.getTrain().getTrainId(), ticket.getDate(), ticket.getClassType(), 2);
+									ticket.getTrain().getTrainId(), ticket.getDate(), ticket.getClassType(), TicketStatus.WAITINGLIST.getValue());
 
 				ticketToConfirm.setSeatNumber(ticket.getSeatNumber());
 				ticketToConfirm.setCoach(ticket.getCoach());
-				ticketToConfirm.setStatus(TicketStatus.CONFORMED.getValue());
+				ticketToConfirm.setStatus(TicketStatus.CONFORMED.getValue()); 
 				ticketRepository.save(ticketToConfirm);
 			} else {
 				Availability availability = availabilityRepository.findByTrainTrainIdAndDateAndClassTypeAndCoach(
@@ -121,7 +119,7 @@ public class TicketServiceImpl implements TicketService {
 				break;
 			default:
 				response.setStatus(AppConstants.TICKET_IN_INVALIED_STATE);
-				break;
+					break;
 			}
 			return response;
 		} catch (Exception e) {

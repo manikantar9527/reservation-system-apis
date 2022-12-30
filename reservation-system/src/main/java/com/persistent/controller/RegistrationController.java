@@ -29,7 +29,7 @@ public class RegistrationController {
 	@Autowired
 	private AvailabilityService availabilityService;
 
-	@PostMapping("passeger/registration")
+	@PostMapping("passenger/registration")
 	public ResponseEntity<StatusDto> addPassengerDetails(@Valid @RequestBody PassengerDto passenger) {
 		log.info("addPassengerDetails() excecution - started");
 		return ResponseEntity.ok(service.addPassengerDetails(passenger));

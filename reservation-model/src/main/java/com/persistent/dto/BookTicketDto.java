@@ -6,9 +6,6 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.persistent.dao.Passenger;
-import com.persistent.dao.TrainInfo;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,11 +16,10 @@ import lombok.NoArgsConstructor;
 public class BookTicketDto {
 	@NotNull(message = "UserId can not be null")
 	private Long userId;
-	private TrainInfo train;
-	private Passenger passenger;
+
 	@NotNull(message = "TrainId can not be null")
 	private Long trainId;
-	
+
 	@NotBlank(message = "ClassType can not be null")
 	private String ClassType;
 

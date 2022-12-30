@@ -65,11 +65,10 @@ public class TrainInfoServiceTest {
 		when(trainInfoRepository.findBySourceAndDestinationAndAvailableDaysContaining(any(), any(), any()))
 				.thenReturn(Arrays.asList(train));
 
-		when(availabilityRepository.findByTrainTrainIdAndClassType(any(), any()))
+		when(availabilityRepository.findByTrainTrainIdAndClassTypeOrderByCoach(any(), any()))
 				.thenReturn(Util.getAvailabilities(train, date));
 		assertNotNull(service.searchTrain(new SearchTrainDto("KDR", "ATP", date)));
 	}
-	// searchTrain
 
 	@Test
 	public void searchTrainException() {
@@ -79,7 +78,7 @@ public class TrainInfoServiceTest {
 		when(trainInfoRepository.findBySourceAndDestinationAndAvailableDaysContaining(any(), any(), any()))
 				.thenReturn(new ArrayList<>());
 
-		when(availabilityRepository.findByTrainTrainIdAndClassType(any(), any()))
+		when(availabilityRepository.findByTrainTrainIdAndClassTypeOrderByCoach(any(), any()))
 				.thenReturn(Util.getAvailabilities(train, date));
 		try {
 			service.searchTrain(new SearchTrainDto("KDR", "ATP", date));
