@@ -15,4 +15,5 @@ public class CancelTicketDto {
 	private String contactNumber;
 	@NotNull(message = "TicketId can not be null")
 	private Long ticketId;
+	private boolean flag;
 }

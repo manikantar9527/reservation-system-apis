@@ -1,5 +1,7 @@
 package com.persistent.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.persistent.dao.Ticket;
+import com.persistent.dto.BookTicketDto;
 import com.persistent.dto.CancelTicketDto;
 import com.persistent.dto.StatusDto;
 import com.persistent.dto.TicketDto;
@@ -39,9 +43,15 @@ public class TicketController {
 	}
 
 	@GetMapping("ticket/details/{mobileNumber}")
-	public ResponseEntity<TicketDto> getTicketDetails(@PathVariable String mobileNumber) {
+	public ResponseEntity<List<TicketDto>> getTicketDetails(@PathVariable String mobileNumber) {
 		log.info("getTicketStatus() excecution - started");
 		return ResponseEntity.ok(service.getTicketDetails(mobileNumber));
+	}
+
+	@PostMapping("book/ticket")
+	public ResponseEntity<Ticket> bookTicket(@Valid @RequestBody BookTicketDto reqDto) {
+		log.info("bookTicket() excecution - started");
+		return ResponseEntity.ok(service.bookTicket(reqDto));
 	}
 
 }

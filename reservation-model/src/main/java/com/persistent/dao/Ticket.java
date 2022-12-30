@@ -47,9 +47,6 @@ public class Ticket {
 	private String classType;
 	private String pnr;
 
-	@CreatedDate
-	private Date createdOn;
-
 	public Ticket(Long ticketId) {
 		super();
 		this.ticketId = ticketId;

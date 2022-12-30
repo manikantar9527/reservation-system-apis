@@ -1,18 +1,24 @@
 package com.persistent.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.persistent.client.BookServiceClient;
 import com.persistent.config.AppConstants;
 import com.persistent.dao.Availability;
 import com.persistent.dao.Ticket;
+import com.persistent.dto.BookTicketDto;
 import com.persistent.dto.CancelTicketDto;
 import com.persistent.dto.StatusDto;
 import com.persistent.dto.TicketDto;
@@ -38,6 +44,9 @@ public class TicketServiceImpl implements TicketService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	@Autowired
+	private BookServiceClient bookServiceClient;
+
 	@Override
 	public StatusDto cancelTicket(CancelTicketDto reqDto) {
 		try {
@@ -51,11 +60,10 @@ public class TicketServiceImpl implements TicketService {
 			Calendar cal2 = Calendar.getInstance();
 			cal1.setTime(new Date());
 			cal2.setTime(ticket.getDate());
-			if (cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
+			if (!reqDto.isFlag() && cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
 					&& cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR))
 				throw new ReservationException(AppConstants.TICKET_CANCELLATION_NOT_ALLOWED,
 						HttpStatus.PRECONDITION_FAILED, Severity.INFO);
-			 
 
 			ticket.setStatus(TicketStatus.CANCELLED.getValue());
 			ticketRepository.save(ticket);
@@ -69,16 +77,17 @@ public class TicketServiceImpl implements TicketService {
 			if (totalSeatsAvailable == 0 && (avail.getLowerWaitingList() + avail.getUpperWaitingList()) != 0) {
 				Ticket ticketToConfirm = ticketRepository
 						.findFirstByTrainTrainIdAndDateAndClassTypeAndStatusAndBerthTypeOrderByTicketId(
-								ticket.getTrain().getTrainId(), ticket.getDate(), ticket.getClassType(), TicketStatus.WAITINGLIST.getValue(),
-								ticket.getBerthType());
+								ticket.getTrain().getTrainId(), ticket.getDate(), ticket.getClassType(),
+								TicketStatus.WAITINGLIST.getValue(), ticket.getBerthType());
 				if (ticketToConfirm == null)
 					ticketToConfirm = ticketRepository
 							.findFirstByTrainTrainIdAndDateAndClassTypeAndStatusOrderByTicketId(
-									ticket.getTrain().getTrainId(), ticket.getDate(), ticket.getClassType(), TicketStatus.WAITINGLIST.getValue());
+									ticket.getTrain().getTrainId(), ticket.getDate(), ticket.getClassType(),
+									TicketStatus.WAITINGLIST.getValue());
 
 				ticketToConfirm.setSeatNumber(ticket.getSeatNumber());
 				ticketToConfirm.setCoach(ticket.getCoach());
-				ticketToConfirm.setStatus(TicketStatus.CONFORMED.getValue()); 
+				ticketToConfirm.setStatus(TicketStatus.CONFORMED.getValue());
 				ticketRepository.save(ticketToConfirm);
 			} else {
 				Availability availability = availabilityRepository.findByTrainTrainIdAndDateAndClassTypeAndCoach(
@@ -119,7 +128,7 @@ public class TicketServiceImpl implements TicketService {
 				break;
 			default:
 				response.setStatus(AppConstants.TICKET_IN_INVALIED_STATE);
-					break;
+				break;
 			}
 			return response;
 		} catch (Exception e) {
@@ -129,12 +138,24 @@ public class TicketServiceImpl implements TicketService {
 	}
 
 	@Override
-	public TicketDto getTicketDetails(String mobileNumber) {
+	public List<TicketDto> getTicketDetails(String mobileNumber) {
 		try {
-			Ticket ticket = ticketRepository.findByPassengerContactNumber(mobileNumber)
-					.orElseThrow(() -> new ReservationException(AppConstants.INVALID_MOBILENUMBER,
-							HttpStatus.PRECONDITION_FAILED, Severity.INFO));
-			return modelMapper.map(ticket, TicketDto.class);
+			List<Ticket> tickets = ticketRepository.findByPassengerContactNumber(mobileNumber);
+			List<TicketDto> response=new ArrayList<>();
+			tickets.forEach(t->{
+				response.add(modelMapper.map(t, TicketDto.class));
+			});
+			return response;
+		} catch (Exception e) {
+			throw new ReservationException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, Severity.INFO);
+		}
+	}
+
+	@Override
+	public Ticket bookTicket(@Valid BookTicketDto reqDto) {
+		try {
+			ResponseEntity<Ticket> response = bookServiceClient.bookTicket(reqDto);
+			return response.getBody();
 		} catch (Exception e) {
 			throw new ReservationException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR, Severity.INFO);
 		}

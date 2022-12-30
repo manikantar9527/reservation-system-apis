@@ -7,8 +7,10 @@ import static org.mockito.Mockito.when;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +18,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import com.persistent.client.BookServiceClient;
 import com.persistent.dao.Passenger;
 import com.persistent.dao.Ticket;
 import com.persistent.dao.TrainInfo;
+import com.persistent.dto.BookTicketDto;
 import com.persistent.dto.CancelTicketDto;
 import com.persistent.dto.StatusDto;
 import com.persistent.dto.TicketDto;
@@ -45,6 +51,9 @@ public class TicketServiceTest {
 	@MockBean
 	private TicketRepository ticketRepository;
 
+	@MockBean
+	private BookServiceClient bookServiceClient;
+
 	private Date getTime() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(2023, 5, 25);
@@ -61,7 +70,7 @@ public class TicketServiceTest {
 				.total2ASeats(100).noOf2ACoaches(2).noOf3ACoaches(2).total3ASeats(100).noOfSLCoaches(2)
 				.totalSLSeats(100).noOf2SCoaches(2).total2SSeats(100).build();
 		when(trainInfoRepository.findByTrainId(any())).thenReturn(train);
-		when(ticketRepository.findByPassengerContactNumber(any())).thenReturn(Optional.of(new Ticket()));
+		when(ticketRepository.findByPassengerContactNumber(any())).thenReturn(Arrays.asList(new Ticket()));
 
 	}
 
@@ -71,14 +80,14 @@ public class TicketServiceTest {
 				.seatNumber("c1-1").classType("3A").train(null)
 				.passenger(new Passenger(1L, "mani", "pwd", "9590989397", "email", "female", 30, "address", null))
 				.build();
-		when(ticketRepository.findByPassengerContactNumber(any())).thenReturn(Optional.of(ticket));
-		TicketDto res = service.getTicketDetails("9590989397");
+		when(ticketRepository.findByPassengerContactNumber(any())).thenReturn(Arrays.asList(ticket));
+		List<TicketDto> res = service.getTicketDetails("9590989397");
 		assertNotNull(res);
 	}
 
 	@Test
 	public void getTicketDetailsException() {
-		when(ticketRepository.findByPassengerContactNumber(any())).thenReturn(Optional.empty());
+		when(ticketRepository.findByPassengerContactNumber(any())).thenReturn(null);
 		try {
 			service.getTicketDetails("9590989397");
 		} catch (Exception e) {
@@ -156,7 +165,7 @@ public class TicketServiceTest {
 				.thenReturn(Util.getAvailabilities(train, getTime()));
 		when(availabilityRepository.findByTrainTrainIdAndDateAndClassTypeAndCoach(any(), any(), any(), any()))
 				.thenReturn(Util.getAvailabilities(train, getTime()).get(0));
-		assertNotNull(service.cancelTicket(new CancelTicketDto("9590989397", 1L)));
+		assertNotNull(service.cancelTicket(new CancelTicketDto("9590989397", 1L, true)));
 	}
 
 	@Test
@@ -177,7 +186,7 @@ public class TicketServiceTest {
 				.thenReturn(Util.getAvailabilities(train, getTime()).get(0));
 		when(ticketRepository.findFirstByTrainTrainIdAndDateAndClassTypeAndStatusOrderByTicketId(1L, getTime(), "3A",
 				2)).thenReturn(ticket);
-		assertNotNull(service.cancelTicket(new CancelTicketDto("9590989397", 1L)));
+		assertNotNull(service.cancelTicket(new CancelTicketDto("9590989397", 1L, true)));
 	}
 
 	@Test
@@ -192,13 +201,13 @@ public class TicketServiceTest {
 		when(availabilityRepository.findByTrainTrainIdAndDateAndClassTypeAndCoach(any(), any(), any(), any()))
 				.thenReturn(Util.getAvailabilities(train, getTime()).get(0));
 		try {
-			service.cancelTicket(new CancelTicketDto("9590989397", 1L));
+			service.cancelTicket(new CancelTicketDto("9590989397", 1L, true));
 		} catch (Exception e) {
 			assertNotNull("");
 		}
 
 	}
-	
+
 	@Test
 	public void cancelTicketCase3() {
 		TrainInfo train = TrainInfo.builder().trainId(1L).trainNumber("72456").trainName("ATP Express")
@@ -218,12 +227,23 @@ public class TicketServiceTest {
 		when(ticketRepository.findFirstByTrainTrainIdAndDateAndClassTypeAndStatusOrderByTicketId(1L, getTime(), "3A",
 				2)).thenReturn(ticket);
 		try {
-			service.cancelTicket(new CancelTicketDto("9590989397", 1L));
+			service.cancelTicket(new CancelTicketDto("9590989397", 1L, true));
 		} catch (Exception e) {
 			assertNotNull("");
 		}
 	}
-	
-	
+
+	@Test
+	public void bookTicket() {
+		TrainInfo train = TrainInfo.builder().trainId(1L).trainNumber("72456").trainName("ATP Express")
+				.total2ASeats(100).noOf2ACoaches(2).noOf3ACoaches(2).total3ASeats(100).noOfSLCoaches(2)
+				.totalSLSeats(100).noOf2SCoaches(2).total2SSeats(100).build();
+		Ticket ticket = Ticket.builder().ticketId(1L).status(0).date(getTime()).berthType("lower").coach("c1")
+				.seatNumber("c1-1").classType("3A").train(train)
+				.passenger(new Passenger(1L, "mani", "pwd", "9590989397", "email", "female", 30, "address", null))
+				.build();
+		when(bookServiceClient.bookTicket(any())).thenReturn(new ResponseEntity<Ticket>(ticket, HttpStatus.OK));
+		assertNotNull(service.bookTicket(new BookTicketDto()));
+	}
 
 }

@@ -1,6 +1,7 @@
 package com.persistent.repository;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,6 +29,6 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
 	Optional<Ticket> findByPnr(String pnr);
 
-	Optional<Ticket> findByPassengerContactNumber(String mobileNumber);
+	List<Ticket> findByPassengerContactNumber(String mobileNumber);
 
 }

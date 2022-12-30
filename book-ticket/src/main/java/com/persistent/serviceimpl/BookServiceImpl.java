@@ -64,7 +64,8 @@ public class BookServiceImpl implements BookService {
 			Passenger passenger = passengerRepository.findByUserId(reqDto.getUserId())
 					.orElseThrow(() -> new ReservationException(AppConstants.INVALID_USER_ID,
 							HttpStatus.PRECONDITION_FAILED, Severity.INFO));
-			List<Availability> availabilities = callReservationService(reqDto);
+			List<Availability> availabilities = availabilityRepository.findByTrainTrainIdAndDateAndClassType(reqDto.getTrainId(),
+					reqDto.getDate(),reqDto.getClassType());
 			String seatNumber = null;
 			String coach = null;
 			TrainInfo trainInfo = trainInfoRepository.findByTrainId(reqDto.getTrainId())
