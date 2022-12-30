@@ -9,6 +9,7 @@ public class AppConstants {
 	public static final String USER_ALREADY_REGISTERED = "user already registered";
 	public static final String INVALID_DETAILS = "Data not available";
 	public static final String TRAIN_NOT_AVAILABLE = "Train is not available between the Station on this date";
+	public static final String CLASS_TYPES="3A,2A,SL,2S";
 	public static final String INVALID_MOBILENUMBER = "Invalid mobileNumber";
 	public static final String INVALID_USER_ID = "Invalid UserId";
 	public static final String SEATS_AVAILABLE = "seates available";

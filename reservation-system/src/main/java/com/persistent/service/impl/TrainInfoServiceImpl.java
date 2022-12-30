@@ -46,7 +46,7 @@ public class TrainInfoServiceImpl implements TrainInfoService {
 			trainDto.setTrainName(t.getTrainName());
 			trainDto.setTrainNumber(t.getTrainNumber());
 			List<SeatInfoDto> availabilities = new ArrayList<>();
-			List<String> classTypes = Arrays.asList("3A", "2A", "SL", "2S");
+			List<String> classTypes = Arrays.asList(AppConstants.CLASS_TYPES.split(","));
 			classTypes.forEach(c -> {
 				List<Availability> availableSeats = availabilityRepository
 						.findByTrainTrainIdAndClassTypeOrderByCoach(t.getTrainId(), c);
